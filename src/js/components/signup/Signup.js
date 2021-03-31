@@ -6,9 +6,8 @@ import Navigation from '../navigation/Navigation.js';
 import { serviceAPI } from '../../service/index.js';
 
 export default class Signup extends Component {
-  constructor({ changeTemplate }) {
+  constructor() {
     super();
-    this.changeTemplate = changeTemplate;
     this.isDuplicateChecked;
     this.verifiedEmail = '';
   }
@@ -87,8 +86,9 @@ export default class Signup extends Component {
     }
 
     showSnackbar(SNACKBAR_MESSAGE.SIGNUP_SUCCESS);
-    this.changeTemplate('/login');
+    const popStateEvent = new Event('popstate');
     history.pushState({ pathName: '/login' }, null, '/login');
+    window.dispatchEvent(popStateEvent);
     Navigation.changeSelectedButtonColor();
     this.isDuplicateChecked = false;
   }

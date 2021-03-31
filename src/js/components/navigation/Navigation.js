@@ -3,9 +3,8 @@ import { $, $$, showElement, hideElement, showSnackbar } from '../../utils/index
 import { LOCAL_STORAGE_KEY, SNACKBAR_MESSAGE } from '../../constants/index.js';
 
 export default class Navigation extends Component {
-  constructor({ changeTemplate }) {
+  constructor() {
     super();
-    this.changeTemplate = changeTemplate;
     this.selectDOM();
     this.bindEvent();
   }
@@ -27,17 +26,19 @@ export default class Navigation extends Component {
 
     if (e.target.id === 'navigation-logout-button') {
       localStorage.removeItem(LOCAL_STORAGE_KEY.TOKEN);
-      this.changeTemplate('/');
+      const popStateEvent = new Event('popstate');
       history.pushState({ pathName: '/' }, null, '/');
+      window.dispatchEvent(popStateEvent);
       showSnackbar(SNACKBAR_MESSAGE.LOGOUT_SUCCESS);
 
       return;
     }
 
     const pathName = e.target.closest('.navigation-link').getAttribute('href');
-    await this.changeTemplate(pathName);
     Navigation.changeSelectedButtonColor(e.target);
     history.pushState({ pathName }, null, pathName);
+    const popStateEvent = new Event('popstate');
+    window.dispatchEvent(popStateEvent);
   }
 
   render(token = '') {

@@ -6,9 +6,8 @@ import Navigation from '../navigation/Navigation.js';
 import { serviceAPI } from '../../service/index.js';
 
 export default class Login extends Component {
-  constructor({ changeTemplate }) {
+  constructor() {
     super();
-    this.changeTemplate = changeTemplate;
   }
 
   bindEvent() {
@@ -35,8 +34,9 @@ export default class Login extends Component {
       item: accessToken,
     });
 
-    this.changeTemplate('/');
+    const popStateEvent = new Event('popstate');
     history.pushState({ pathName: '/' }, null, '/');
+    window.dispatchEvent(popStateEvent);
     Navigation.changeSelectedButtonColor();
   }
 
@@ -44,8 +44,9 @@ export default class Login extends Component {
     e.preventDefault();
 
     const pathName = e.target.closest('.navigation-link').getAttribute('href');
-    this.changeTemplate(pathName);
+    const popStateEvent = new Event('popstate');
     history.pushState({ pathName }, null, pathName);
+    window.dispatchEvent(popStateEvent);
   }
 
   render() {
